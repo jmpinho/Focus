@@ -17,7 +17,7 @@ const somPause = new Audio("/sons/pause.mp3");
 const fimTimer = new Audio("/sons/beep.mp3");
 const startPauseBt = document.querySelector("#start-pause");
 
-let tempoCorridoEmSegundos = 1500;
+let tempoCorridoEmSegundos = 1;
 let intervaloId = null;
 
 musica.loop = true;
@@ -78,6 +78,11 @@ const contagemRegressiva = () => {
   if (tempoCorridoEmSegundos <= 0) {
     fimTimer.play();
     alert("Tempo finalizado");
+    const focoAtivo = html.getAttribute("data-contexto") == "foco";
+    if (focoAtivo) {
+      const evento = new CustomEvent("focoFinalizado");
+      document.dispatchEvent(evento);
+    }
     zerar();
     return;
   }
