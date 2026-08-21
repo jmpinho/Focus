@@ -8,9 +8,10 @@ const paragrafoDescricaoTarefa = document.querySelector(
 );
 
 const btnRemoverConcluidas = document.querySelector("#btn-remover-concluidas");
+const btnRemoverTodas = document.querySelector("#btn-remover-todas");
 
 const btnCancelar = document.querySelector(".app__form-footer__button--cancel");
-const tarefas = JSON.parse(localStorage.getItem("tarefas")) || []; //programação defensiva para caso não tenha nenhuma tarefa, mostre a lista vazia
+let tarefas = JSON.parse(localStorage.getItem("tarefas")) || []; //programação defensiva para caso não tenha nenhuma tarefa, mostre a lista vazia
 
 let tarefaSelecionada = null;
 let liTarefaSelecionada = null;
@@ -123,6 +124,18 @@ document.addEventListener("focoFinalizado", () => {
   }
 });
 
-btnRemoverConcluidas.onclick = () => {
-  const seletor = "";
+const removerTarefas = (somenteCompletas) => {
+  const seletor = somenteCompletas
+    ? ".app__section-task-list-item-complete"
+    : ".app__section-task-list-item";
+  document.querySelectorAll(seletor).forEach((elemento) => {
+    elemento.remove();
+  });
+  tarefas = somenteCompletas
+    ? tarefas.filter((tarefa) => !tarefa.completa)
+    : [];
+  atualizarTarefas();
 };
+
+btnRemoverConcluidas.onclick = () => removerTarefas(true);
+btnRemoverTodas.onclick = () => removerTarefas(false);
